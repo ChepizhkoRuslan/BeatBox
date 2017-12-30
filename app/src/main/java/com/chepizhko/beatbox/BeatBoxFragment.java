@@ -39,6 +39,15 @@ public class BeatBoxFragment extends Fragment {
         private SoundHolder(ListItemSoundBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
+            // В конструкторе создается и присоединяется объект ViewModel
+            mBinding.setViewModel(new SoundViewModel(mBeatBox));
+        }
+        // в методе bind обновляются данные, с которыми работает ViewModel
+        public void bind(Sound sound) {
+            mBinding.getViewModel().setSound(sound);
+            // Вызывая этот метод, вы приказываете макету обновить себя немедленно вместо того,
+            // чтобы ожидать одну-две миллисекунды. Таким образом обеспечивается быстрота реакции RecyclerView
+            mBinding.executePendingBindings();
         }
     }
     private class SoundAdapter extends RecyclerView.Adapter<SoundHolder> {
@@ -54,6 +63,8 @@ public class BeatBoxFragment extends Fragment {
         }
         @Override
         public void onBindViewHolder(SoundHolder holder, int position) {
+            Sound sound = mSounds.get(position);
+            holder.bind(sound);
         }
         @Override
         public int getItemCount() {
