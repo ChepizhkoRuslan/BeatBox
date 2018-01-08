@@ -26,4 +26,8 @@ public class SoundViewModel extends BaseObservable {
         // вызовет Button.setText(String),как указано в файле list_item_sound.xml.
         notifyChange();
     }
+
+    public void onButtonClicked() {
+        mBeatBox.play(mSound);
+    }
 }

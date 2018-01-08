@@ -24,6 +24,9 @@ public class BeatBoxFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Вызов setRetainInstance(true) удерживает фрагмент.
+        // Такой фрагмент не уничтожается вместе с активностью, а сохраняется и передается новой активности
+        setRetainInstance(true);
         mBeatBox = new BeatBox(getActivity());
     }
     @Override
@@ -33,6 +36,12 @@ public class BeatBoxFragment extends Fragment {
         binding.recyclerView.setAdapter(new SoundAdapter(mBeatBox.getSounds()));
         return binding.getRoot();
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBeatBox.release();
+    }
+
     private class SoundHolder extends RecyclerView.ViewHolder {
         private ListItemSoundBinding mBinding;
 
@@ -50,6 +59,7 @@ public class BeatBoxFragment extends Fragment {
             mBinding.executePendingBindings();
         }
     }
+
     private class SoundAdapter extends RecyclerView.Adapter<SoundHolder> {
         private List<Sound> mSounds;
         public SoundAdapter(List<Sound> sounds) {
